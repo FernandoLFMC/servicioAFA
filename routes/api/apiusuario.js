@@ -1,17 +1,14 @@
 var express = require('express');
 const USER = require('../../database/esquema/users');
 var router = express.Router();
-
-
-
 const path = require('path');
 const fs = require('fs');
-//const ObjectId = require('mongoose').Types.ObjectId;
 
 
 
 
-router.post('/', function (req, res, next) {
+
+router.post('/user', function (req, res, next) {
     //verificar que no exista mismo correo
     USER.findOne({email:req.body.email})
     .exec()
@@ -107,6 +104,89 @@ return;
 }
 var r = await USER.remove({_id: req.query.id});
 res.status(300).json(r);
+});
+
+router.post('/login', (req, res, next) => {
+    Usuario.find({
+            email: req.body.email
+        }).exec().then(user => {
+          console.log(req.body);
+            if (user.length < 1) {
+                return res.status(401).json({
+                    error: "Usuario inexistente"
+                });
+            }
+            if (sha1(req.body.password)!= user[0].password) {
+                return res.status(400).json({
+                    error: "Fallo al autenticar, contraseña incorrecta"
+                });
+            }else{
+                const token = jwt.sign({
+                    email: user[0].email,
+                    userId: user[0]._id
+                    },
+                    process.env.JWT_KEY || 'secret321', {
+                        expiresIn: "2h"
+                    });
+
+                return res.status(200).json({
+                    message: "Acceso correcto",
+                    tipo: user[0].tipo,
+                    token,
+                    id:user[0]._id
+                });
+            }
+        })
+        .catch(err => {
+            //console.log(err);
+            res.status(500).json({
+                error: err
+            });
+        });
+});
+////loginGoogle
+router.post('/logingoogle',(req,res)=>{
+    const token=jwt.sign({
+              email:req.body.email
+            },process.env.JWT_KEY||'miClave',{
+              expiresIn:"2h"
+            });
+    res.status(200).json({
+      message:token
+    });
+});
+/////
+router.patch('/:id', function (req, res, next) {
+    let idUsuario = req.params.id;
+    const datos = {};
+
+    Object.keys(req.body).forEach((key) => {
+      if (key != 'email' || key != 'tipo'|| key != 'sexo') {
+        datos[key] = req.body[key];
+      }
+    });
+    //console.log(datos);
+    Usuario.updateOne({_id: idUsuario}, datos).exec()
+        .then(result => {
+          let message = 'Datos actualizados';
+          if (result.ok == 0) {
+              message = 'Verifique los datos, no se realizaron cambios';
+          }
+          if (result.ok == 1 && result.n == 0) {
+              message = 'No se encontro el recurso';
+          }
+          if (result.ok == 1 && result.n == 1 && result.nModified == 0) {
+              message = 'Se recibieron los mismos datos antiguos,no se realizaron cambios';
+          }
+          res.json({
+              message,
+              result
+          });
+        }).catch(err => {
+            res.status(500).json({
+                error: err
+            })
+        });
 });
 
 module.exports = router;

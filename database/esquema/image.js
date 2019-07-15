@@ -9,6 +9,6 @@ const imgSchema = Schema({
     type : Date,
     default : Date.now()
   }
-
+});
 const image = mongoose.model('IMAGE', imgSchema);
 module.exports = image;
