@@ -8,7 +8,8 @@ const usuarioSchema = Schema({
     },
     email: {
         type: String,
-        required: 'Falta el email'
+        required: 'Falta el email',
+
     },
     password: String,
     telefono: Number,
@@ -37,6 +38,6 @@ const usuarioSchema = Schema({
 
 });
 
-const usuario = mongoose.model('Usuario', usuarioSchema);
+const usuario = mongoose.model('USER', usuarioSchema);
 
 module.exports = usuario;
