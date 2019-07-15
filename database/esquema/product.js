@@ -1,7 +1,7 @@
 const mongoose = require('../connect');
 const Schema = mongoose.Schema;
 
-const productoSchema = Schema({
+const productSchema = Schema({
 
     //tipo de usuario en este caso vendedor
 
@@ -14,7 +14,7 @@ const productoSchema = Schema({
     descripcion: String,
     precio: {
         type: Number,
-        require:'Producto debe tener un precio',
+        require:'introducir precio del producto',
         min:0.50
     },
     //cantidad del producto
@@ -37,8 +37,8 @@ const productoSchema = Schema({
 });
 mongoose.set('useCreateIndex', true);
 
-productoSchema.index({descripcion: 'text'});
+productSchema.index({descripcion: 'text'});
 
-const producto = mongoose.model('Product', productSchema);
+const product = mongoose.model('Product', productSchema);
 
 module.exports = product;
