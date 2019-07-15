@@ -6,18 +6,18 @@ const usuarioSchema = Schema({
         type: String,
         required: 'Falta el nombre'
     },
+    telf: Number,
     email: {
         type: String,
         required: 'Falta el email'
     },
     password: String,
-    telefono: Number,
+
     sexo:String,
     direccion:String,
     log: Number,
     lat: Number,
-    avatar: String,
-    tipo: {
+    vendOcomp: {
         type: String,
         required: 'Debe seleccionar tipo de usuario',
         enum: ['vendedor', 'comprador']// vendedor, comprador
@@ -37,6 +37,6 @@ const usuarioSchema = Schema({
 
 });
 
-const usuario = mongoose.model('Usuario', usuarioSchema);
+const usuario = mongoose.model('USER', usuarioSchema);
 
 module.exports = usuario;
