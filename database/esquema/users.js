@@ -6,18 +6,18 @@ const usuarioSchema = Schema({
         type: String,
         required: 'Falta el nombre'
     },
+    telf: Number,
     email: {
         type: String,
         required: 'Falta el email',
 
     },
     password: String,
-    telefono: Number,
+
     sexo:String,
     direccion:String,
     log: Number,
     lat: Number,
-    avatar: String,
     tipo: {
         type: String,
         required: 'Debe seleccionar tipo de usuario',
