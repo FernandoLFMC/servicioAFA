@@ -2,19 +2,19 @@ var express = require('express');
 var router = express.Router();
 
 
-const Cita = require('../../database/esquema/citas');
+const Cita = require('../../database/schema/cita');
 
 
-/* Agregar nuevo cita */
+//nueva cita
 router.post("/", (req, res) => {
 
     let fields = req.body
     var datos = {
         vendedor : fields.file.vendedor,
         comprador : fields.file.comprador,
-        prod: fields.prod,
-        cant: fields.cant,
-        estado : 'porConfirmar',
+        producto: fields.producto,
+        cantidad : fields.cantidad,
+        estado : 'por confirmar',
         fechaCita : fields.fechaCita,
         horaCita : fields.horaCita,
         log : fields.log,
@@ -25,14 +25,14 @@ router.post("/", (req, res) => {
     var modelCita = new Cita(datos);
     modelCita.save()
         .then(result => {
-        res.status(201).json({message: 'existe una nueva cita',result});
+        res.status(201).json({message: 'Se creo una nueva cita',result});
         })
         .catch(err => {
         res.status(500).json({error:err.message})
         });
 });
 
-/* Leer una Cita */
+//mostrar una Cita
 router.get('/:id', function (req, res, next) {
     let idCita = req.params.id;
     Cita.findOne({_id: idCita}).select('-__v').exec().then(docs => {
@@ -47,8 +47,8 @@ router.get('/:id', function (req, res, next) {
         })
     });
 });
-/* listar Citas de un usuario */
-router.get('/usuario/:id', function (req, res, next) {
+//listar Citas de un usuario
+router.get('/user/:id', function (req, res, next) {
     let idUser = req.params.id;
     Cita.find().or([{comprador:idUser},{vendedor:idUser}]).select('-__v').exec().then(docs => {
         if(docs.length == 0){
@@ -62,7 +62,7 @@ router.get('/usuario/:id', function (req, res, next) {
         })
     });
 });
-/* Actualizar cita */
+//Modificar cita
 router.patch('/:id', function (req, res) {
     let idCita = req.params.id;
     if (req.body.texto == undefined) {
@@ -95,7 +95,7 @@ router.patch('/:id', function (req, res) {
             })
         });
 });
-/*Eliminar cita */
+//Eliminar cita
 router.delete('/:id', function (req, res) {
     let idCita = req.params.id;
     Cita.deleteOne({_id: idCita}).exec()
