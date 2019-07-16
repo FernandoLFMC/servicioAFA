@@ -9,6 +9,7 @@ var logger = require('morgan');
 var apirUsuario = require('./routes/api/apiusuario');
 const apirProduct = require('./routes/api/apiproduct');
 var apirImage = require('./routes/api/apiimage');
+var apirCitas = require('./routes/api/apicitas');
 
 var app = express();
 
@@ -25,6 +26,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/v1.0/api', apirUsuario);
 app.use('/v1.0/api', apirProduct);
 app.use('/v1.0/image', apirImage);
+app.use('/v1.0/citas', apirCitas);
 
 //app.use('/', indexRouter);
 //app.use('/users', usersRouter);
