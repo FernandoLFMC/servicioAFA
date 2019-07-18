@@ -18,7 +18,7 @@ router.get("/", (req, res) => {
       })
     });
   });
-/*Listar imagenes del usuario */
+// lista de imagenes del usuario
 router.get("/user/:id", (req, res) => {
     Imagen.find({idUsuario:req.params.id}).exec()
     .then(docs => {
@@ -32,7 +32,7 @@ router.get("/user/:id", (req, res) => {
       })
     });
   });
-/* Obtener imagen por url*/
+//obtener imagen por la url
 router.get("/:id", (req, res) => {
     Imagen.findOne({_id: req.params.id}).exec()
     .then(doc => {
