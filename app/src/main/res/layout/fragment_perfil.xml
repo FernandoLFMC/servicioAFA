@@ -7,6 +7,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
+        android:background="@drawable/fondo"
         android:layout_height="match_parent">
 
 
@@ -92,7 +93,7 @@
             android:layout_marginTop="15dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="9dp"
-            android:text="Detalles Perfil"
+            android:text="Actualizar Perfil"
 
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             app:layout_constraintBottom_toTopOf="@+id/imageView3"
@@ -115,12 +116,12 @@
             android:layout_width="167dp"
             android:layout_height="151dp"
             android:layout_marginTop="8dp"
+            android:background="@drawable/iconuser"
             android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView13"
-            app:srcCompat="@android:drawable/sym_def_app_icon" />
+            app:layout_constraintTop_toBottomOf="@+id/textView13" />
 
         <EditText
             android:id="@+id/editTextNombre"
@@ -136,11 +137,12 @@
 
         <Button
             android:id="@+id/btnChat"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="157dp"
+            android:layout_height="67dp"
             android:layout_marginTop="24dp"
-            android:text="Guardar"
             android:background="@drawable/button_rounded"
+            android:text="Actualizar"
+            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
