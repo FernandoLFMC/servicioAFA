@@ -35,11 +35,8 @@ const upload = multer({
     }
 }).single('foto');
 
-<<<<<<< HEAD
-/* Agregar nuevo producto */
-=======
+
 //Agregar nuevo producto
->>>>>>> 102d80d0e17e3f93da9421d15eafba175768557c
 router.post("/", (req, res) => {
 
     upload(req, res, (error) => {
@@ -68,11 +65,9 @@ router.post("/", (req, res) => {
                 descripcion:fields.descripcion,
                 precio:fields.precio,
                 stock:fields.stock,
-<<<<<<< HEAD
+
                 foto:'/api/imagenes/' + result._id,
-=======
-                foto:'/api/apiimagenes/' + result._id,
->>>>>>> 102d80d0e17e3f93da9421d15eafba175768557c
+
             }
 
             if (fields.stock == 0 && fields.estado == 'disponible') {
@@ -84,11 +79,9 @@ router.post("/", (req, res) => {
             return modelProducto.save()
           })
           .then(result => {
-<<<<<<< HEAD
-            res.status(201).json({message: 'Se Agrego el producto',result});
-=======
+
             res.status(201).json({message: 'Producto agregado',result});
->>>>>>> 102d80d0e17e3f93da9421d15eafba175768557c
+
           })
           .catch(err => {
             res.status(500).json({error:err.message})
@@ -96,11 +89,9 @@ router.post("/", (req, res) => {
       }
     });
   });
-<<<<<<< HEAD
-/* listar Productos para el comprador */
-=======
+
 //listar Productos para el comprador
->>>>>>> 102d80d0e17e3f93da9421d15eafba175768557c
+
 router.get('/', function (req, res, next) {
 
     let criterios = {};
@@ -122,11 +113,9 @@ router.get('/', function (req, res, next) {
     });
 });
 
-<<<<<<< HEAD
-/* Ver un producto*/
-=======
+
 // Ver un determinado producto
->>>>>>> 102d80d0e17e3f93da9421d15eafba175768557c
+
 router.get('/:id', function (req, res, next) {
     Producto.findOne({_id:req.params.id}).select('-__v').exec().then(doc => {
         if(doc == null){
@@ -140,11 +129,9 @@ router.get('/:id', function (req, res, next) {
         })
     });
 });
-<<<<<<< HEAD
-/* LIstar Productos de un vendedor */
-=======
+
 //LIstar Productos de un vendedor
->>>>>>> 102d80d0e17e3f93da9421d15eafba175768557c
+
 router.get('/vendedor/:id', function (req, res, next) {
     Producto.find({vendedor:req.params.id}).select('-__v').exec().then(docs => {
         if(docs.length == 0){
@@ -172,21 +159,17 @@ router.patch('/:id', function (req, res) {
         .then(result => {
             let message = 'Datos actualizados';
             if (result.ok == 0) {
-<<<<<<< HEAD
-                message = 'Verifique sus datos porque no existen cambios';
-=======
+
                 message = 'Verifique los datos no existe cambios';
->>>>>>> 102d80d0e17e3f93da9421d15eafba175768557c
+
             }
             if (result.ok == 1 && result.n == 0) {
                 message = 'No se encontro el recurso';
             }
             if (result.ok == 1 && result.n == 1 && result.nModified == 0) {
-<<<<<<< HEAD
-                message = 'mismos datos ,no existen cambios';
-=======
+
                 message = 'no se relizaron cambios en los datos';
->>>>>>> 102d80d0e17e3f93da9421d15eafba175768557c
+
             }
             res.json({
                 message,

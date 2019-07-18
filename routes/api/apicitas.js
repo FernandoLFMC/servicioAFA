@@ -5,11 +5,7 @@ var router = express.Router();
 const Cita = require('../../database/schema/cita');
 
 
-<<<<<<< HEAD
 // Agregar una cita
-=======
-//nueva cita
->>>>>>> 102d80d0e17e3f93da9421d15eafba175768557c
 router.post("/", (req, res) => {
 
     let fields = req.body
@@ -29,22 +25,14 @@ router.post("/", (req, res) => {
     var modelCita = new Cita(datos);
     modelCita.save()
         .then(result => {
-<<<<<<< HEAD
         res.status(201).json({message: 'Cita Agregada',result});
-=======
-        res.status(201).json({message: 'Se creo una nueva cita',result});
->>>>>>> 102d80d0e17e3f93da9421d15eafba175768557c
         })
         .catch(err => {
         res.status(500).json({error:err.message})
         });
 });
 
-<<<<<<< HEAD
 //ver mis citas
-=======
-//mostrar una Cita
->>>>>>> 102d80d0e17e3f93da9421d15eafba175768557c
 router.get('/:id', function (req, res, next) {
     let idCita = req.params.id;
     Cita.findOne({_id: idCita}).select('-__v').exec().then(docs => {
@@ -59,11 +47,7 @@ router.get('/:id', function (req, res, next) {
         })
     });
 });
-<<<<<<< HEAD
 // lista de todas las Citas
-=======
-//listar Citas de un usuario
->>>>>>> 102d80d0e17e3f93da9421d15eafba175768557c
 router.get('/user/:id', function (req, res, next) {
     let idUser = req.params.id;
     Cita.find().or([{comprador:idUser},{vendedor:idUser}]).select('-__v').exec().then(docs => {
@@ -78,11 +62,7 @@ router.get('/user/:id', function (req, res, next) {
         })
     });
 });
-<<<<<<< HEAD
 //Modificar una cita
-=======
-//Modificar cita
->>>>>>> 102d80d0e17e3f93da9421d15eafba175768557c
 router.patch('/:id', function (req, res) {
     let idCita = req.params.id;
     if (req.body.texto == undefined) {

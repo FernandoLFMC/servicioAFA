@@ -7,11 +7,7 @@ const citaSchema = Schema({
         ref: "User",
         require:'Requiere informacion del vendedor'
     },
-<<<<<<< HEAD:database/schema/cita.js
-    comprador: {// /api/user/id 
-=======
-    comprador: {
->>>>>>> 102d80d0e17e3f93da9421d15eafba175768557c:database/schema/cita.js
+    comprador: {// /api/user/id
         type: Schema.Types.ObjectId,
         ref: "User",
         require:'Requiere informacion del comprador'
@@ -27,11 +23,7 @@ const citaSchema = Schema({
     },
     estado: {   // por confirmar, cancelada, terminada
         type: String,
-<<<<<<< HEAD:database/schema/cita.js
         required: 'requiere un estado estado'
-=======
-        required: 'Requiere un estado'
->>>>>>> 102d80d0e17e3f93da9421d15eafba175768557c:database/schema/cita.js
     },
     fechaCita: Date,
     horaCita: String,

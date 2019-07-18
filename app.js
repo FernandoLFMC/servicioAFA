@@ -9,11 +9,7 @@ var usersRouter = require('./routes/users');
 //var apireRouter = require('./routes/apirouter');
 //var service = require('./routes/services');
 const user = require('./routes/api/apiusuarios');
-<<<<<<< HEAD
 const imagenes = require('./routes/api/imagenes');
-=======
-const imagenes = require('./routes/api/apiimagenes');
->>>>>>> 102d80d0e17e3f93da9421d15eafba175768557c
 const product = require('./routes/api/apiproduct');
 //const mensajes = require('./routes/api/mensajes');
 const citas = require('./routes/api/apicitas');
@@ -38,11 +34,7 @@ app.use('/api/imagenes', imagenes);
 app.use('/api/product', product);
 //app.use('/api/mensajes', mensajes);
 app.use('/api/citas', citas);
-<<<<<<< HEAD
 
-=======
-//catch 404 and forward to error handler
->>>>>>> 102d80d0e17e3f93da9421d15eafba175768557c
 app.use(function(req, res, next) {
   next(createError(404));
 });
