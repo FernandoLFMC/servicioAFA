@@ -5,9 +5,7 @@ const path = require('path');
 const fs = require('fs');
 const jwt=require('jsonwebtoken');
 const authorization=require('./middleware/auth');
-//const ObjectId = require('mongoose').Types.ObjectId;
 const sha1 = require('sha1');
-
 const Usuario = require('../../database/schema/user');
 const Imagen = require('../../database/schema/imagen');
 
@@ -29,7 +27,7 @@ const fileFilter = (req, file, cb) => {
     if (file.mimetype === 'image/png' || file.mimetype === 'image/jpeg' ) {
         return cb(null, true);
     }
-    return cb(new Error('Solo imagenes con extencion png, jpg y jpeg'));
+    return cb(new Error('Solo se admiten imagenes png, jpg y jpeg'));
 }
 
 const upload = multer({
@@ -40,47 +38,11 @@ const upload = multer({
     }
 }).single('imagen');
 
-// Agregar avatar al usuario
-router.post("/imagen/:id", (req, res) => {
-    console.log(req.body);
-    upload(req, res, (error) => {
-      if(error){
-        return res.status(500).json({
-          "error" : error.message
-
-        });
-      }else{
-        if (req.file == undefined) {
-          return res.status(400).json({
-            "error" : 'Imagen no recibida'
-
-          });
-        }
-        var img = {
-          name : req.file.originalname,
-          idUsuario: req.params.id,
-          path : req.file.path,
-        };
-        var modelImagen = new Imagen(img);
-        modelImagen.save()
-          .then( (result) => {
-            return Usuario.findByIdAndUpdate(req.params.id,{avatar:'/api/imagenes/' + result._id}).exec()
-          })
-          .then(result => {
-            res.status(201).json({message: 'Imagen agregada correctamente',result});
-          })
-          .catch(err => {
-            res.status(500).json({error:err.message})
-          });
-      }
-    });
-  });
-
-//muestra registro del usuario
+//lista de todos los usuarios
 router.get('/', function (req, res, next) {
   Usuario.find().select('-__v -password -fechaRegistro').exec().then(docs => {
     if(docs.length == 0){
-      return res.status(404).json({message: 'usuarios inexistentes'});
+      return res.status(404).json({message: 'no existen usuarios registrados'});
     }
     res.json(docs);
   })
@@ -90,10 +52,11 @@ router.get('/', function (req, res, next) {
       })
   });
 });
+//muestra un determinado usuario
 router.get('/:id', function (req, res, next) {
   Usuario.findOne({_id:req.params.id}).select('-__v -password -fechaRegistro').exec().then(doc => {
     if(doc == null){
-      return res.status(404).json({message: 'usuario inexistente'});
+      return res.status(404).json({message: 'no existe el usuario'});
     }
     res.json(doc);
   })
@@ -104,27 +67,32 @@ router.get('/:id', function (req, res, next) {
   });
 });
 
-// Registro de un nueco usuario
+// Registro de un nuevo usuario
 router.post('/', function (req, res, next) {
-    Usuario.findOne({email:req.body.email})//verifica que no exista mismo correo
+    //verificar que no exista mismo correo
+    Usuario.findOne({email:req.body.email})
     .exec()
     .then(doc => {
 
       if (doc != null) {
-        return res.status(401).json({error:'el correo esta en uso '});
+        return res.status(401).json({error:'el correo ya esta en uso'});
       }
+
+
       const datos = {
         nombre: req.body.nombre,
         email: req.body.email,
         telefono: req.body.telefono,
         sexo:req.body.sexo,
+        tipo: req.body.tipo,//el tipo de usuario
         lat: req.body.lat,
         lon: req.body.lon,
-        tipo: req.body.tipo,
+
+
       };
       if (req.body.password == undefined || req.body.password == '') {
         return res.status(401).json({
-          error: 'ingrese la contraseña'
+          error: 'Falta la contraseña'
         })
       }
       datos.password = sha1(req.body.password);
@@ -143,57 +111,7 @@ router.post('/', function (req, res, next) {
       })
     });
 });
-//login del usuario existente
-router.post('/login', (req, res, next) => {
-    Usuario.find({
-            email: req.body.email
-        }).exec().then(user => {
-          console.log(req.body);
-            if (user.length < 1) {
-                return res.status(401).json({
-                    error: "Usuario inexistente"
-                });
-            }
-            if (sha1(req.body.password)!= user[0].password) {
-                return res.status(400).json({
-                    error: "contraseña mal escrita, vuelva a intentarlo "
-                });
-            }else{
-                const token = jwt.sign({
-                    email: user[0].email,
-                    userId: user[0]._id
-                    },
-                    process.env.JWT_KEY || 'secret321', {
-                        expiresIn: "2h"
-                    });
-
-                return res.status(200).json({
-                    message: "Acceso correcto",
-                    tipo: user[0].tipo,
-                    token,
-                    id:user[0]._id
-                });
-            }
-        })
-        .catch(err => {
-            //console.log(err);
-            res.status(500).json({
-                error: err
-            });
-        });
-});
-//login con Google
-router.post('/logingoogle',(req,res)=>{
-    const token=jwt.sign({
-              email:req.body.email
-            },process.env.JWT_KEY||'miClave',{
-              expiresIn:"2h"
-            });
-    res.status(200).json({
-      message:token
-    });
-});
-/////
+//servicio de actualizacion
 router.patch('/:id', function (req, res, next) {
     let idUsuario = req.params.id;
     const datos = {};
@@ -203,7 +121,7 @@ router.patch('/:id', function (req, res, next) {
         datos[key] = req.body[key];
       }
     });
-    //console.log(datos);
+
     Usuario.updateOne({_id: idUsuario}, datos).exec()
         .then(result => {
           let message = 'Datos actualizados';
@@ -226,5 +144,96 @@ router.patch('/:id', function (req, res, next) {
             })
         });
 });
+//agregar una imagen para el usuario
+router.post("/imagen/:id", (req, res) => {
+    console.log(req.body);
+    upload(req, res, (error) => {
+      if(error){
+        return res.status(500).json({
+          "error" : error.message
+
+        });
+      }else{
+        if (req.file == undefined) {
+          return res.status(400).json({
+            "error" : 'No se recibio la imagen'
+
+          });
+        }
+        var img = {
+          name : req.file.originalname,
+          idUsuario: req.params.id,
+          path : req.file.path,
+        };
+        var modelImagen = new Imagen(img);
+        modelImagen.save()
+          .then( (result) => {
+            return Usuario.findByIdAndUpdate(req.params.id,{avatar:'/api/apiimagenes/' + result._id}).exec()
+          })
+          .then(result => {
+            res.status(201).json({message: 'Se Agrego la imagen correctamente',result});
+          })
+          .catch(err => {
+            res.status(500).json({error:err.message})
+          });
+      }
+    });
+  });
+
+
+
+
+
+//autentificacion de login
+router.post('/login', (req, res, next) => {
+    Usuario.find({
+            email: req.body.email
+        }).exec().then(user => {
+          console.log(req.body);
+            if (user.length < 1) {
+                return res.status(401).json({
+                    error: "Usuario inexistente"
+                });
+            }
+            if (sha1(req.body.password)!= user[0].password) {
+                return res.status(400).json({
+                    error: "Fallo al autenticar, contraseña erronea"
+                });
+            }else{
+                const token = jwt.sign({
+                    email: user[0].email,
+                    userId: user[0]._id
+                    },
+                    process.env.JWT_KEY || 'secret321', {
+                        expiresIn: "2h"
+                    });
+
+                return res.status(200).json({
+                    message: "Acceso correcto",
+                    tipo: user[0].tipo,
+                    token,
+                    id:user[0]._id
+                });
+            }
+        })
+        .catch(err => {
+            res.status(500).json({
+                error: err
+            });
+        });
+});
+//autentificacion de login con Google
+router.post('/logingoogle',(req,res)=>{
+    const token=jwt.sign({
+              email:req.body.email
+            },process.env.JWT_KEY||'miClave',{
+              expiresIn:"2h"
+            });
+    res.status(200).json({
+      message:token
+    });
+});
+
+
 
 module.exports = router;

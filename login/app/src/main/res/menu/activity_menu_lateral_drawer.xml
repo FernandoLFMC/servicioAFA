@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/inicio"
+            android:icon="@drawable/icon_compra"
+            android:title="Inicio" />
+        <item
+            android:id="@+id/Public_anuncio"
+            android:icon="@drawable/icon_camera"
+            android:title="Publicar un anuncio" />
+        <item
+            android:id="@+id/perfil"
+            android:icon="@drawable/iconuser"
+            android:title="Mi Perfil" />
+        <item
+            android:id="@+id/MisAnuncios"
+            android:icon="@drawable/icon_anuncios"
+            android:title="Mis Anuncios" />
+        <item
+            android:id="@+id/mensajes"
+            android:icon="@drawable/icon_mensaje"
+            android:title="Mis Mensajes" />
+        <item
+            android:id="@+id/Citas"
+            android:icon="@drawable/icon_cita"
+            android:title="Citas" />
+    </group>
+
+    <item android:title="Communicate">
+        <menu>
+            <item
+                android:id="@+id/ayuda"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Ayuda" />
+            <item
+                android:id="@+id/nav_send"
+                android:icon="@drawable/ic_menu_send"
+                android:title="Config" />
+        </menu>
+    </item>
+
+</menu>
